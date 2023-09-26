@@ -7,7 +7,7 @@ const app = express();
 // Configurar a conexão com o MongoDB
 mongoose.connect(process.env.CONNECTIONSTRING, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
-    console.log('Conectei à base de dados');
+    console.log('Base de dados conectada!');
     app.emit('pronto');
   })
   .catch(e => console.log(e));
