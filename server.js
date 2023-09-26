@@ -14,6 +14,9 @@ mongoose.connect(process.env.CONNECTIONSTRING, { useNewUrlParser: true, useUnifi
 
 // Configuração do Express
 app.use(express.json());
+app.get('/', (req, res) => {
+  res.send('Hello World!');
+});
 
 // Rotas
 app.on('pronto', () => {
