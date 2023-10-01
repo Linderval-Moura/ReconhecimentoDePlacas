@@ -25,7 +25,10 @@ const storage = multer.diskStorage({
     cb(null, 'uploads/');
   },
   filename: function (req, file, cb) {
-    cb(null, Date() + path.extname(file.originalname));
+    const timestamp = moment().format('YYYYMMDDHHmmss');
+    const originalname = file.originalname.replace(/[^a-zA-Z0-9.]/g, '_');
+    const filename = `${timestamp}_${originalname}`;
+    cb(null, filename);
   },
 });
 
@@ -35,7 +38,7 @@ const upload = multer({ storage: storage });
 const PlacaSchema = new mongoose.Schema({
   numeroPlaca: String,
   cidade: String,
-  dataHora: { type: Date, default: Date.now },
+  dataHora: String,
 });
 
 const Placa = mongoose.model('Placa', PlacaSchema);
@@ -48,7 +51,7 @@ app.get('/', (req, res) => {
 // Rota para o upload da imagem
 app.post('/cadastroPlaca', upload.single('imagem'), async (req, res) => {
   try {
-    const { cidade } = req.body;
+    const { cidade, dataHora } = req.body;
     const imagemPath = req.file.path;
 
     // Usar Tesseract.js para reconhecimento de caracteres na imagem
@@ -59,16 +62,17 @@ app.post('/cadastroPlaca', upload.single('imagem'), async (req, res) => {
     const novaPlaca = new Placa({
       numeroPlaca: text,
       cidade,
+      dataHora,
     });
+
     await novaPlaca.save();
 
-    res.status(200).json({ message: 'Placa cadastrada com sucesso' });
+    res.status(200).json({ message: 'Placa cadastrada com sucesso', novaPlaca });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Ocorreu um erro ao processar a placa' });
   }
 });
-
 
 // Rotas
 app.on('pronto', () => {

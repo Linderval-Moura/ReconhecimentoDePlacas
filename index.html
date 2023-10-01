@@ -7,10 +7,34 @@
 </head>
 <body>
     <h1>Upload de Placa</h1>
-    <form action="/cadastroPlaca" method="POST" enctype="multipart/form-data">
+    <form id="placaForm" action="/cadastroPlaca" method="POST" enctype="multipart/form-data">
         <input type="file" name="imagem" accept=".png">
         <input type="text" name="cidade" placeholder="Nome da cidade">
+        <input type="hidden" name="dataHora" id="dataHora">
         <button type="submit">Enviar</button>
     </form>
+
+    <script>
+        const dataHoraInput = document.getElementById("dataHora");
+
+        // Função para obter a data e hora atual no formato 'YYYYMMDDHHmmss'
+        function getCurrentDateTime() {
+            const now = new Date();
+            const year = String(now.getFullYear());
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+                    /// 2611-02-05T02:32:25.405+00:00
+            return `${year}${month}${day}${hours}${minutes}${seconds}`;
+        }
+
+        // Preenche o campo de dataHora antes de enviar o formulário
+        document.getElementById("placaForm").addEventListener("submit", (event) => {
+            const currentDateTime = getCurrentDateTime();
+            dataHoraInput.value = currentDateTime;
+        });
+    </script>
 </body>
 </html>
