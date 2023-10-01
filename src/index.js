@@ -5,10 +5,12 @@ const mongoose = require('mongoose');
 const multer = require('multer');
 const moment = require('moment');
 const path = require('path');
+const PDFDocument = require('pdfkit'); // Importe a biblioteca pdfkit
+const fs = require('fs');
 
 const app = express();
 
-// Configurar a conexão com o MongoDB
+// Conexão com o MongoDB
 mongoose.connect(process.env.CONNECTIONSTRING, { useNewUrlParser: true, useUnifiedTopology: true })
    .then(() => {
      console.log('Base de dados conectada!');
@@ -25,15 +27,12 @@ const storage = multer.diskStorage({
     cb(null, 'uploads/');
   },
   filename: function (req, file, cb) {
-    const timestamp = moment().format('YYYYMMDDHHmmss');
-    const originalname = file.originalname.replace(/[^a-zA-Z0-9.]/g, '_');
-    const filename = `${timestamp}_${originalname}`;
-    cb(null, filename);
+    cb(null, Date.now() + path.extname(file.originalname));
   },
 });
 
-const upload = multer({ storage: storage });
-
+const upload = multer({ storage });
+const { parseISO, format } = require('date-fns'); 
 
 const PlacaSchema = new mongoose.Schema({
   numeroPlaca: String,
@@ -42,6 +41,8 @@ const PlacaSchema = new mongoose.Schema({
 });
 
 const Placa = mongoose.model('Placa', PlacaSchema);
+
+app.use(express.json());
 
 // Rota para a página HTML
 app.get('/', (req, res) => {
@@ -58,11 +59,14 @@ app.post('/cadastroPlaca', upload.single('imagem'), async (req, res) => {
     const Tesseract = require('tesseract.js');
     const { data: { text } } = await Tesseract.recognize(imagemPath);
 
+    const numeroPlacaLimpo = text.replace(/\s+/g, '');
+
     // Criar um registro no banco de dados
+    const dataAtualFormatada = format(new Date(), "yyyy-MM-dd'T'HH:mm:ss.SSSxxx");
     const novaPlaca = new Placa({
-      numeroPlaca: text,
+      numeroPlaca: numeroPlacaLimpo,
       cidade,
-      dataHora,
+      dataHora: dataAtualFormatada,
     });
 
     await novaPlaca.save();
@@ -71,6 +75,66 @@ app.post('/cadastroPlaca', upload.single('imagem'), async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Ocorreu um erro ao processar a placa' });
+  }
+});
+
+//Rota para retornar em PDF os dados de uma cidade passada em parametro , tente testar com "juazeiro" como parametro
+app.get('/relatorio/cidade/:cidade', async (req, res) => {
+  try {
+    const cidade = req.params.cidade;
+
+    // Consulte o banco de dados para obter registros com a cidade especificada
+    const registros = await Placa.find({ cidade });
+
+    // Crie um novo documento PDF
+    const doc = new PDFDocument();
+
+    // Defina o nome do arquivo PDF gerado
+    const pdfFileName = `relatorio_${cidade}_${format(new Date(), 'yyyyMMddHHmmss')}.pdf`;
+
+    // Defina os cabeçalhos HTTP para fazer o navegador baixar o PDF
+    res.setHeader('Content-disposition', `attachment; filename=${pdfFileName}`);
+    res.setHeader('Content-type', 'application/pdf');
+
+    // Crie o PDF com as informações dos registros
+    doc.pipe(res);
+
+    doc.fontSize(16).text(`Relatório de Registros - Cidade: ${cidade}`, { align: 'center' });
+
+    registros.forEach((registro) => {
+      doc.fontSize(12).text(`Número da Placa: ${registro.numeroPlaca}`);
+      doc.fontSize(12).text(`Cidade: ${registro.cidade}`);
+      const dataHoraFormatada = format(parseISO(registro.dataHora), "dd/MM/yyyy HH:mm:ss");
+      doc.fontSize(12).text(`Data e Hora: ${dataHoraFormatada}`);
+      doc.moveDown();
+    });
+
+    doc.end();
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Ocorreu um erro ao gerar o relatório' });
+  }
+});
+
+//Rota para consultar placas
+app.get('/consulta/:placa', async (req, res) => {
+  try {
+    const placa = req.params.placa;
+
+    // Consulte o banco de dados para verificar se a placa existe
+    const registro = await Placa.findOne({ numeroPlaca: placa });
+
+    if (registro) {
+      // Se a placa existe, retorne um JSON com uma mensagem de sucesso
+      res.status(200).json({ message: 'Placa encontrada no banco de dados' });
+    } else {
+      // Se a placa não existe, retorne um JSON com uma mensagem de erro
+      res.status(404).json({ message: 'Placa não encontrada no banco de dados' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Ocorreu um erro ao consultar a placa' });
   }
 });
 
