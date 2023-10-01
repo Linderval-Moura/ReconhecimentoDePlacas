@@ -9,13 +9,10 @@
     "routes": [
         {
             "src": "/(.*)",
-            "dest": "/",
-            "headers": [
-                {
-                  "key": "Content-Security-Policy",
-                  "value": "default-src 'self'; font-src 'self' https://fonts.gstatic.com;"
-                }
-            ]
+            "headers": {
+                "Content-Security-Policy": "default-src 'self'; font-src 'self' https://fonts.gstatic.com;"
+            },
+            "dest": "/index.js"
         }
     ]
 }
