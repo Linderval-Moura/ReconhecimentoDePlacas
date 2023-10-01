@@ -8,11 +8,7 @@
     ],
     "routes": [
         {
-            "src": "/(.*)",
-            "headers": {
-                "Content-Security-Policy": "default-src 'self'; font-src 'self' https://fonts.gstatic.com;"
-            },
-            "dest": "/src/index.js"
+            "src": "/(.*)"
         }
     ]
 }
