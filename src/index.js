@@ -42,8 +42,6 @@ const PlacaSchema = new mongoose.Schema({
 
 const Placa = mongoose.model('Placa', PlacaSchema);
 
-app.use(express.json());
-
 // Rota para a página HTML
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
