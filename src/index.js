@@ -5,7 +5,9 @@ const mongoose = require('mongoose');
 const multer = require('multer');
 const moment = require('moment');
 const path = require('path');
-const PDFDocument = require('pdfkit'); // Importe a biblioteca pdfkit
+const PDFDocument = require('pdfkit'); 
+const axios = require('axios');
+const FormData = require('form-data');
 const fs = require('fs');
 
 const app = express();
@@ -22,17 +24,7 @@ mongoose.connect(process.env.CONNECTIONSTRING, { useNewUrlParser: true, useUnifi
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, '../uploads/'));
-  },
-  filename: function (req, file, cb) {
-    const timestamp = new Date().toISOString().replace(/[-T:.Z]/g, '');
-    const originalname = file.originalname.replace(/[^a-zA-Z0-9.]/g, '_');
-    const filename = `${timestamp}_${originalname}`;
-    cb(null, filename);
-  },
-});
+const storage = multer.memoryStorage(); // Armazenar o arquivo na memória
 
 const upload = multer({ storage: storage });
 const { parseISO, format } = require('date-fns'); 
@@ -53,19 +45,32 @@ app.get('/', (req, res) => {
 // Rota para o upload da imagem
 app.post('/cadastroPlaca', upload.single('imagem'), async (req, res) => {
   try {
-    const { cidade, dataHora } = req.body;
-    const imagemPath = req.file.path;
+    const { cidade } = req.body;
+    const imagemBuffer = req.file.buffer;
 
-    // Usar Tesseract.js para reconhecimento de caracteres na imagem
-    const Tesseract = require('tesseract.js');
-    const { data: { text } } = await Tesseract.recognize(imagemPath);
+    // Usar axios para enviar a imagem para a API de OCR
+    const formData = new FormData();
+    formData.append('imageFile', imagemBuffer, { filename: 'imagem.png' });
 
-    const numeroPlacaLimpo = text.replace(/\s+/g, '');
+    const axiosOptions = {
+      method: 'POST',
+      url: 'https://image-to-text-ocr1.p.rapidapi.com/ocr',
+      headers: {
+        'X-RapidAPI-Key': process.env.CHAVERAPIDAPI,
+        'X-RapidAPI-Host': 'image-to-text-ocr1.p.rapidapi.com',
+        ...formData.getHeaders(),
+      },
+      data: formData,
+    };
+
+    const ocrResponse = await axios.request(axiosOptions);
+    const ocrText = ocrResponse.data.text;
+    console.log("orcText:", ocrText);
 
     // Criar um registro no banco de dados
     const dataAtualFormatada = format(new Date(), "yyyy-MM-dd'T'HH:mm:ss.SSSxxx");
     const novaPlaca = new Placa({
-      numeroPlaca: numeroPlacaLimpo,
+      numeroPlaca: ocrText,
       cidade,
       dataHora: dataAtualFormatada,
     });
