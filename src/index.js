@@ -27,11 +27,14 @@ const storage = multer.diskStorage({
     cb(null, 'uploads/');
   },
   filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname));
+    const timestamp = new Date().toISOString().replace(/[-T:.Z]/g, '');
+    const originalname = file.originalname.replace(/[^a-zA-Z0-9.]/g, '_');
+    const filename = `${timestamp}_${originalname}`;
+    cb(null, filename);
   },
 });
 
-const upload = multer({ storage });
+const upload = multer({ storage: storage });
 const { parseISO, format } = require('date-fns'); 
 
 const PlacaSchema = new mongoose.Schema({
