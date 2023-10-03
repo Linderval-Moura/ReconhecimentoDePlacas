@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "vercel-build": "npm install"
+    "vercel-build": "npx install"
   },
   "author": "",
   "license": "ISC",
