@@ -27,7 +27,7 @@ app.use(express.urlencoded({ extended: true }));
 
 const storage = multer.memoryStorage(); // Armazenar o arquivo na memória
 
-const upload = multer({ storage });
+const upload = multer({ storage: storage });
 
 const { parseISO, format } = require('date-fns'); 
 
@@ -56,10 +56,10 @@ app.post('/cadastroPlaca', upload.single('imagem'), async (req, res) => {
 
     const axiosOptions = {
       method: 'POST',
-      url: 'https://ocr43.p.rapidapi.com/v1/results',
+      url: 'https://image-to-text-ocr1.p.rapidapi.com/ocr',
       headers: {
         'X-RapidAPI-Key': process.env.CHAVERAPIDAPI,
-        'X-RapidAPI-Host': 'ocr43.p.rapidapi.com',
+        'X-RapidAPI-Host': 'image-to-text-ocr1.p.rapidapi.com',
         ...formData.getHeaders(),
       },
       data: formData,
