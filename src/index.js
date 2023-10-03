@@ -50,8 +50,6 @@ app.post('/cadastroPlaca', upload.single('imagem'), async (req, res) => {
   try {
     const { cidade, dataHora } = req.body;
     const imagemBuffer = req.file.buffer;
-    
-    console.log("dataHora: ",dataHora);
 
     const pngBuffer = await sharp(imagemBuffer)
       .toFormat('png')
