@@ -50,15 +50,30 @@ app.post('/cadastroPlaca', upload.single('imagem'), async (req, res) => {
     const { cidade, dataHora } = req.body;
     const imagemBuffer = req.file.buffer;
 
-    // Usar Tesseract.js para reconhecimento de caracteres na imagem
-    const {  data: { text } } = await Tesseract.recognize(imagemBuffer);
+    // Usar axios para enviar a imagem para a API de OCR
+    const formData = new FormData();
+    formData.append('imageFile', imagemBuffer, { filename: 'imagem.png' });
+
+    const axiosOptions = {
+      method: 'POST',
+      url: 'https://image-to-text-ocr1.p.rapidapi.com/ocr',
+      headers: {
+        'X-RapidAPI-Key': process.env.CHAVERAPIDAPI,
+        'X-RapidAPI-Host': 'image-to-text-ocr1.p.rapidapi.com',
+        ...formData.getHeaders(),
+      },
+      data: formData,
+    };
+
+    const ocrResponse = await axios.request(axiosOptions);
+    const ocrText = ocrResponse.data.text;
 
     // Criar um registro no banco de dados
-
+    const dataAtualFormatada = format(new Date(), "yyyy-MM-dd'T'HH:mm:ss.SSSxxx");
     const novaPlaca = new Placa({
-      numeroPlaca: text,
+      numeroPlaca: ocrText,
       cidade,
-      dataHora: dataHora,
+      dataHora: dataAtualFormatada,
     });
 
     await novaPlaca.save();
