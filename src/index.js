@@ -10,7 +10,6 @@ const axios = require('axios');
 const FormData = require('form-data');
 const fs = require('fs');
 const Tesseract = require('tesseract.js');
-const sharp = require('sharp');
 
 const app = express();
 
