@@ -4,20 +4,11 @@
         {
             "src":"index.js",
             "use": "@vercel/node"
-        },
-        {
-            "src": "public/*",
-            "use": "@vercel/static"
-          },
-        {
-          "src": "tesseract-core.wasm",
-          "use": "@now/static"
-        },
-        {
-          "src": "tesseract-core-simd.wasm",
-          "use": "@now/static"
         }
     ],
+    "env": {
+        "TESSDATA_PREFIX": "/var/task/node_modules/tesseract.js-core/"
+    },
     "routes": [
         {
             "src": "/(.*)",
