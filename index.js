@@ -9,7 +9,7 @@ const PDFDocument = require('pdfkit');
 const axios = require('axios');
 const FormData = require('form-data');
 const fs = require('fs');
-const Tesseract = require("tesseract.js");
+const { createWorker } = require('tesseract.js');
 
 const app = express();
 
@@ -50,30 +50,17 @@ app.post('/cadastroPlaca', upload.single('imagem'), async (req, res) => {
     const { cidade, dataHora } = req.body;
     const imagemBuffer = req.file.buffer;
 
-    // Usar axios para enviar a imagem para a API de OCR
-    const formData = new FormData();
-    formData.append('imageFile', imagemBuffer, { filename: 'imagem.png' });
-
-    const axiosOptions = {
-      method: 'POST',
-      url: 'https://image-to-text-ocr1.p.rapidapi.com/ocr',
-      headers: {
-        'X-RapidAPI-Key': process.env.CHAVERAPIDAPI,
-        'X-RapidAPI-Host': 'image-to-text-ocr1.p.rapidapi.com',
-        ...formData.getHeaders(),
-      },
-      data: formData,
-    };
-
-    const ocrResponse = await axios.request(axiosOptions);
-    const ocrText = ocrResponse.data.text;
+    
+    const worker = await createWorker('eng');
+    // Usar Tesseract.js para reconhecimento de caracteres na imagem
+    const { data: { text } } = await worker.recognize(imagemBuffer);
+    await worker.terminate();
 
     // Criar um registro no banco de dados
-    const dataAtualFormatada = format(new Date(), "yyyy-MM-dd'T'HH:mm:ss.SSSxxx");
     const novaPlaca = new Placa({
-      numeroPlaca: ocrText,
+      numeroPlaca: text,
       cidade,
-      dataHora: dataAtualFormatada,
+      dataHora: dataHora,
     });
 
     await novaPlaca.save();
