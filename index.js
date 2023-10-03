@@ -53,7 +53,7 @@ app.post('/cadastroPlaca', upload.single('imagem'), async (req, res) => {
     
     const worker = await createWorker('eng');
     // Usar Tesseract.js para reconhecimento de caracteres na imagem
-    const { data: { text } } = await worker.recognize(imagemBuffer);
+    const { data: { text } } = await worker.recognize(imagemBuffer, "lang");
     await worker.terminate();
 
     // Criar um registro no banco de dados
