@@ -9,7 +9,8 @@ const PDFDocument = require('pdfkit');
 const axios = require('axios');
 const FormData = require('form-data');
 const fs = require('fs');
-const Tesseract = require("tesseract.js");
+const { createWorker } = require('tesseract.js');
+
 
 const app = express();
 
@@ -39,10 +40,27 @@ const PlacaSchema = new mongoose.Schema({
 
 const Placa = mongoose.model('Placa', PlacaSchema);
 
+
+process.env.TESSDATA_PREFIX = path.join(__dirname, 'tessdata'); // Altere 'tessdata' para o diretório correto, se necessário
+
+const createTesseractWorker = async () => {
+  const worker = createWorker();
+  await worker.load();
+  await worker.loadLanguage('eng');
+  await worker.initialize('eng');
+  return worker;
+};
+
 // Rota para a página HTML
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
+
+let tesseractWorker;
+
+(async () => {
+  tesseractWorker = await createTesseractWorker();
+})();
 
 // Rota para o upload da imagem
 app.post('/cadastroPlaca', upload.single('imagem'), async (req, res) => {
@@ -51,7 +69,7 @@ app.post('/cadastroPlaca', upload.single('imagem'), async (req, res) => {
     const imagemBuffer = req.file.buffer;
 
     // Usar Tesseract.js para reconhecimento de caracteres na imagem
-    const {  data: { text } } = await Tesseract.recognize(imagemBuffer);
+    const {  data: { text } } = await tesseractWorker.recognize(imagemBuffer);
 
     // Criar um registro no banco de dados
 
