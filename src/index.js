@@ -59,7 +59,7 @@ app.post('/cadastroPlaca', upload.single('imagem'), async (req, res) => {
     const novaPlaca = new Placa({
       numeroPlaca: text,
       cidade,
-      dataHora,
+      dataHora: dataHora,
     });
 
     await novaPlaca.save();
