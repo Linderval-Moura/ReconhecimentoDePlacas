@@ -5,9 +5,7 @@ const mongoose = require('mongoose');
 const multer = require('multer');
 const moment = require('moment');
 const path = require('path');
-const PDFDocument = require('pdfkit'); 
-const axios = require('axios');
-const FormData = require('form-data');
+const PDFDocument = require('pdfkit');
 const fs = require('fs');
 const { createWorker } = require('tesseract.js');
 
@@ -49,11 +47,12 @@ app.post('/cadastroPlaca', upload.single('imagem'), async (req, res) => {
   try {
     const { cidade, dataHora } = req.body;
     const imagemBuffer = req.file.buffer;
-
     
     const worker = await createWorker('eng');
+    
     // Usar Tesseract.js para reconhecimento de caracteres na imagem
     const { data: { text } } = await worker.recognize(imagemBuffer, "lang");
+    
     await worker.terminate();
 
     // Criar um registro no banco de dados
