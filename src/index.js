@@ -28,7 +28,7 @@ app.use(express.urlencoded({ extended: true }));
 
 const storage = multer.memoryStorage(); // Armazenar o arquivo na memória
 
-const upload = multer({ storage: storage });
+const upload = multer({ storage });
 
 const { parseISO, format } = require('date-fns'); 
 
