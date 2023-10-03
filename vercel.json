@@ -4,6 +4,14 @@
         {
             "src":"index.js",
             "use": "@vercel/node"
+        },
+        {
+          "src": "tesseract-core.wasm",
+          "use": "@now/static"
+        },
+        {
+          "src": "tesseract-core-simd.wasm",
+          "use": "@now/static"
         }
     ],
     "routes": [
