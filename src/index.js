@@ -9,6 +9,8 @@ const PDFDocument = require('pdfkit');
 const axios = require('axios');
 const FormData = require('form-data');
 const fs = require('fs');
+const Tesseract = require('tesseract.js');
+const sharp = require('sharp');
 
 const app = express();
 
@@ -27,6 +29,7 @@ app.use(express.urlencoded({ extended: true }));
 const storage = multer.memoryStorage(); // Armazenar o arquivo na memória
 
 const upload = multer({ storage: storage });
+
 const { parseISO, format } = require('date-fns'); 
 
 const PlacaSchema = new mongoose.Schema({
@@ -45,34 +48,24 @@ app.get('/', (req, res) => {
 // Rota para o upload da imagem
 app.post('/cadastroPlaca', upload.single('imagem'), async (req, res) => {
   try {
-    const { cidade } = req.body;
+    const { cidade, dataHora } = req.body;
     const imagemBuffer = req.file.buffer;
+    
+    console.log("dataHora: ",dataHora);
 
-    // Usar axios para enviar a imagem para a API de OCR
-    const formData = new FormData();
-    formData.append('imageFile', imagemBuffer, { filename: 'imagem.png' });
+    const pngBuffer = await sharp(imagemBuffer)
+      .toFormat('png')
+      .toBuffer();
 
-    const axiosOptions = {
-      method: 'POST',
-      url: 'https://image-to-text-ocr1.p.rapidapi.com/ocr',
-      headers: {
-        'X-RapidAPI-Key': process.env.CHAVERAPIDAPI,
-        'X-RapidAPI-Host': 'image-to-text-ocr1.p.rapidapi.com',
-        ...formData.getHeaders(),
-      },
-      data: formData,
-    };
-
-    const ocrResponse = await axios.request(axiosOptions);
-    const ocrText = ocrResponse.data.text;
-    console.log("orcText:", ocrText);
+    // Usar Tesseract.js para reconhecimento de caracteres na imagem
+    const {  data: { text } } = await Tesseract.recognize(pngBuffer);
 
     // Criar um registro no banco de dados
-    const dataAtualFormatada = format(new Date(), "yyyy-MM-dd'T'HH:mm:ss.SSSxxx");
+
     const novaPlaca = new Placa({
-      numeroPlaca: ocrText,
+      numeroPlaca: text,
       cidade,
-      dataHora: dataAtualFormatada,
+      dataHora: dataHora,
     });
 
     await novaPlaca.save();
