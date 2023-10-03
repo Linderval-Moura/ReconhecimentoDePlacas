@@ -6,9 +6,13 @@
             "use": "@vercel/node"
         }
     ],
-    "env": {
-        "TESSDATA_PREFIX": "/var/task/node_modules/tesseract.js-core/"
-    },
+    "functions": {
+        "index.js": {
+          "includeFiles": "node_modules/tesseract.js-core/tesseract-core-simd.wasm",
+          "memory": 1024,
+          "maxDuration": 10
+        }
+      },
     "routes": [
         {
             "src": "/(.*)",
