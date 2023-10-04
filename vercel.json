@@ -11,9 +11,5 @@
             "src": "/(.*)",
             "dest": "index.js"
         }
-    ],
-    "files": [
-        "node_modules/tesseract.js-core/",
-        "node_modules/tesseract.js/"
     ]
 }
