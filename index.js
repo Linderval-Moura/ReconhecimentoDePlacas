@@ -7,7 +7,7 @@ const moment = require('moment');
 const path = require('path');
 const PDFDocument = require('pdfkit');
 const fs = require('fs');
-import Tesseract from 'tesseract.js';
+const Tesseract = require('tesseract.js');
 const cors = require('cors');
 
 const app = express();
@@ -26,7 +26,15 @@ mongoose.connect(process.env.CONNECTIONSTRING, { useNewUrlParser: true, useUnifi
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const storage = multer.memoryStorage(); // Armazenar o arquivo na memória
+// Configurar o multer para lidar com uploads de imagens
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "uploads/");
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname));
+  },
+});
 
 const upload = multer({ storage: storage });
 
@@ -49,10 +57,10 @@ app.get('/', (req, res) => {
 app.post('/cadastroPlaca', upload.single('imagem'), async (req, res) => {
   try {
     const { cidade, dataHora } = req.body;
-    const imagemBuffer = req.file.buffer;
+    const imagemPath = req.file.path;
   
     // Usar Tesseract.js para reconhecimento de caracteres na imagem
-    const { data: { text } } = await Tesseract.recognize(imagemBuffer, "isl");
+    const { data: { text } } = await Tesseract.recognize(imagemPath, "por");
 
     // Criar um registro no banco de dados
     const novaPlaca = new Placa({
