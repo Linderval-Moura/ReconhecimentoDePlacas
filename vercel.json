@@ -2,14 +2,14 @@
     "version": 2,
     "builds": [
         {
-            "src":"/Backend/index.js",
+            "src":"./Backend/index.js",
             "use": "@vercel/node"
         }
     ],
     "rewrites": [
         {
-            "source": "/Backend/index.js", 
-            "destination": "/"
+            "source": "/(.*)", 
+            "destination": "./Backend/index.js"
         }
     ]
 }
