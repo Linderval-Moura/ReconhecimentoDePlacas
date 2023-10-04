@@ -15,11 +15,11 @@ app.use(cors({ origin: "http://localhost:3001" }));
 
 // Conexão com o MongoDB
 mongoose.connect(process.env.CONNECTIONSTRING, { useNewUrlParser: true, useUnifiedTopology: true })
-   .then(() => {
-     console.log('Base de dados conectada!');
-     app.emit('pronto');
-   })
-   .catch(e => console.log(e));
+  .then(() => {
+    console.log('Base de dados conectada!');
+    app.emit('pronto');
+  })
+  .catch(e => console.log(e));
 
 // Configuração do Express
 app.use(express.json());
