@@ -11,8 +11,7 @@ const Tesseract = require('tesseract.js');
 const cors = require('cors');
 
 const app = express();
-app.use(cors({ origin: "http://localhost:3002" }));
-
+app.use(cors({ origin: "http://localhost:3001" }));
 
 // Conexão com o MongoDB
 mongoose.connect(process.env.CONNECTIONSTRING, { useNewUrlParser: true, useUnifiedTopology: true })
