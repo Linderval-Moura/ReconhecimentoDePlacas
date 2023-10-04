@@ -29,7 +29,7 @@ app.use(express.urlencoded({ extended: true }));
 // Configurar o multer para lidar com uploads de imagens
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "uploads/");
+    cb(null, "src/uploads/");
   },
   filename: function (req, file, cb) {
     cb(null, Date.now() + path.extname(file.originalname));
