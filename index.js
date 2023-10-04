@@ -11,6 +11,8 @@ import Tesseract from 'tesseract.js';
 const cors = require('cors');
 
 const app = express();
+app.use(cors({ origin: "https://reconhecimento-de-placas.vercel.app/" }));
+
 
 // Conexão com o MongoDB
 mongoose.connect(process.env.CONNECTIONSTRING, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -19,8 +21,6 @@ mongoose.connect(process.env.CONNECTIONSTRING, { useNewUrlParser: true, useUnifi
      app.emit('pronto');
    })
    .catch(e => console.log(e));
-
-app.use(cors({ origin: "https://reconhecimento-de-placas.vercel.app/" }));
 
 // Configuração do Express
 app.use(express.json());
