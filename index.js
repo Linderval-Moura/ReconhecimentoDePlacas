@@ -20,7 +20,7 @@ mongoose.connect(process.env.CONNECTIONSTRING, { useNewUrlParser: true, useUnifi
    })
    .catch(e => console.log(e));
 
-app.use(cors({ origin: "https://reconhecimento-de-placas.vercel.app/" }));
+app.use(cors());
 
 // Configuração do Express
 app.use(express.json());
