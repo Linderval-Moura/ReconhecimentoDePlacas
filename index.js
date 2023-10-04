@@ -7,8 +7,8 @@ const moment = require('moment');
 const path = require('path');
 const PDFDocument = require('pdfkit');
 const fs = require('fs');
-const { createWorker } = require('tesseract.js');
-
+//const { createWorker } = require('tesseract.js');
+import Tesseract from 'tesseract.js';
 const app = express();
 
 // Conexão com o MongoDB
@@ -52,7 +52,7 @@ app.post('/cadastroPlaca', upload.single('imagem'), async (req, res) => {
     const worker = await createWorker('eng');
     
     // Usar Tesseract.js para reconhecimento de caracteres na imagem
-    const { data: { text } } = await worker.recognize(imagemBuffer, "lang");
+    const { data: { text } } = await Tesseract.recognize(imagemBuffer, "isl");
     
     await worker.terminate();
 
