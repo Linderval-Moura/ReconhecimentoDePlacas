@@ -49,12 +49,12 @@ app.post('/cadastroPlaca', upload.single('imagem'), async (req, res) => {
     const imagemBuffer = req.file.buffer;
     
     // Inicia API
-    const worker = await createWorker('eng');
+    // const worker = await createWorker('eng');
     
     // Usar Tesseract.js para reconhecimento de caracteres na imagem
     const { data: { text } } = await Tesseract.recognize(imagemBuffer, "isl");
     
-    await worker.terminate();
+    // await worker.terminate();
 
     // Criar um registro no banco de dados
     const novaPlaca = new Placa({
