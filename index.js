@@ -46,11 +46,9 @@ app.post('/cadastroPlaca', upload.single('imagem'), async (req, res) => {
   try {
     const { cidade, dataHora } = req.body;
     const imagemBuffer = req.file.buffer;
-    
-    
+  
     // Usar Tesseract.js para reconhecimento de caracteres na imagem
     const { data: { text } } = await Tesseract.recognize(imagemBuffer, "isl");
-
 
     // Criar um registro no banco de dados
     const novaPlaca = new Placa({
