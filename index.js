@@ -48,6 +48,7 @@ app.post('/cadastroPlaca', upload.single('imagem'), async (req, res) => {
     const { cidade, dataHora } = req.body;
     const imagemBuffer = req.file.buffer;
     
+    // Inicia API
     const worker = await createWorker('eng');
     
     // Usar Tesseract.js para reconhecimento de caracteres na imagem
