@@ -8,10 +8,8 @@ const path = require('path');
 const PDFDocument = require('pdfkit');
 const fs = require('fs');
 import Tesseract from 'tesseract.js';
-const cors = require('cors');
 
 const app = express();
-app.use(cors());
 
 // Conexão com o MongoDB
 mongoose.connect(process.env.CONNECTIONSTRING, { useNewUrlParser: true, useUnifiedTopology: true })
