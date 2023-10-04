@@ -1,5 +1,5 @@
 {
-    "version": 2,
+    "version": 3,
     "builds": [
         {
             "src":"index.js",
@@ -11,5 +11,9 @@
             "src": "(.*)",
             "dest": "index.js"
         }
+    ],
+    "files": [
+        "index.js",
+        "node_modules/"
     ]
 }
