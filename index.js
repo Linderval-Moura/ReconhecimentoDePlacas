@@ -8,6 +8,7 @@ const path = require('path');
 const PDFDocument = require('pdfkit');
 const fs = require('fs');
 import Tesseract from 'tesseract.js';
+const cors = require('cors');
 
 const app = express();
 
@@ -19,6 +20,7 @@ mongoose.connect(process.env.CONNECTIONSTRING, { useNewUrlParser: true, useUnifi
    })
    .catch(e => console.log(e));
 
+app.use(cors({ origin: "https://reconhecimento-de-placas.vercel.app/" }));
 
 // Configuração do Express
 app.use(express.json());
