@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { Routers } from "./routes/routers.js";
+import { Routers } from "./routes/routers";
 import "./App.css";
 
 function App() {

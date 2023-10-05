@@ -1,7 +1,5 @@
 import { useState } from 'react';
 import axios from 'axios';
-import { Link } from "react-router-dom";
-// import { useSaveData } from "../../hooks/use-saveDate.js";
 
 function CadastroPlaca() {
   const [cidade, setCidade] = useState('');
@@ -23,11 +21,7 @@ function CadastroPlaca() {
     formData.append('imagem', imagem);
 
     try {
-      const response = await axios.post('/cadastroPlaca', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+      const response = await axios.post('http://localhost:3001/cadastroPlaca', formData);
 
       if (response.status === 200) {
         alert('Placa cadastrada com sucesso!');
@@ -39,29 +33,28 @@ function CadastroPlaca() {
 
   return (
     <div>
-      <h2>Cadastro de Placa</h2>
-      <form onSubmit={handleSubmit}>
+      <h1>Cadastro de Placa</h1>
+      <form onSubmit={handleSubmit} action="/cadastroPlaca" method="POST" enctype="multipart/form-data">        
+        <label htmlFor="cidade">Cidade:</label>
+        <input
+          type="text"
+          value={cidade}
+          onChange={handleCidadeChange}
+          required
+        />
+        <br />       
+        <label htmlFor="imagem">Imagem (PNG):</label>
+        <input
+          type="file"
+          name="file"
+          accept="image/png"
+          onChange={handleImagemChange}
+        />
+        <br />
         <div>
-          <label>Cidade:</label>
-          <input
-            type="text"
-            value={cidade}
-            onChange={handleCidadeChange}
-            required
-          />
+        <button type="submit">Cadastrar Placa</button>
         </div>
-        <div>
-          <label>Imagem (PNG):</label>
-          <input
-            type="file"
-            accept=".png"
-            onChange={handleImagemChange}
-            required
-          />
-        </div>
-        <div>
-          <button type="submit">Cadastrar Placa</button>
-        </div>
+        <br />
       </form>
     </div>
   );

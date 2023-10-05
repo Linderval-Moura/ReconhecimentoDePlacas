@@ -56,14 +56,20 @@ app.get('/', (req, res) => {
 });
 
 // Rota para o upload da imagem
-app.post('/cadastroPlaca', upload.single('imagem'), async (req, res) => {
+app.post('/cadastroPlaca', upload.single('file'), async (req, res) => {
   try {
-    const { cidade, dataHora } = req.body;
-    const imagemPath = req.file.path;
+    const { cidade  } = req.body;
   
     // Usar Tesseract.js para reconhecimento de caracteres na imagem
-    const { data: { text } } = await Tesseract.recognize(imagemPath, "por");
+    const { data } = await Tesseract.recognize(
+      `src/uploads/${req.file.filename}`,
+      "por"
+    );
 
+    const text = data.text.trim();
+    console.log("Resultado do OCR:", text);
+
+    const dataHora = new Date();
     // Criar um registro no banco de dados
     const novaPlaca = new Placa({
       numeroPlaca: text,
