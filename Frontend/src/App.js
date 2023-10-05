@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { Routes } from "./routes/routers";
+import { Routers } from "./routes/routers.js";
 
 import "./App.css";
 
 function App() {
   return (
     <>
-      <Routes />
+      <Routers />
     </>
   );
 }

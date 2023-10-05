@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import Cadastro from "../components/CadastroPlaca.js";
-import ConsultaPlaca from "../components/ConsultaPlaca.js";
-import RelatorioPlaca from "../components/RelatorioPlaca.js";
+import ConsultaPlaca from "../components/ConsultarPlaca.js";
+import RelatorioPlaca from "../components/GerarRelatorio.js";
 
 
 export const Routers = () => {
