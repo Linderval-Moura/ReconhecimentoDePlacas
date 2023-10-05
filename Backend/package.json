@@ -5,10 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "vercel": "npm install",
     "dev": "npm-run-all --parallel server start",
     "start": "turbowatch index.js",
-    "server": "json-server data/db.json"
+    "server": "json-server data/db.json",
+    "vercel": "npm install"
   },
   "author": "",
   "license": "ISC",
@@ -26,8 +26,8 @@
   },
   "devDependencies": {
     "npm-run-all": "^4.1.5",
-    "turbowatch": "^2.29.4",
     "tesseract.js": "^5.0.0",
-    "tesseract.js-core": "^5.0.0"
+    "tesseract.js-core": "^5.0.0",
+    "turbowatch": "^2.29.4"
   }
 }
