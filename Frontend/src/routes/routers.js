@@ -7,11 +7,11 @@ import RelatorioPlaca from "../components/GerarRelatorio.js";
 export const Routers = () => {
   return (
     <BrowserRouter> {/* Envolve suas rotas com BrowserRouter */}
-    <Routes>
-      <Route path="/" element={<Cadastro />} />
-      <Route path="/consulta" element={<ConsultaPlaca />} />
-      <Route path="/relatorio" element={<RelatorioPlaca />} />
-    </Routes>
+      <Routes>
+        <Route path="/" element={<Cadastro />} />
+        <Route path="/consulta" element={<ConsultaPlaca />} />
+        <Route path="/relatorio" element={<RelatorioPlaca />} />
+      </Routes>
     </BrowserRouter>
   );
 };
