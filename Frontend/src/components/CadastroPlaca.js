@@ -21,6 +21,8 @@ function CadastroPlaca() {
     formData.append('cidade', cidade);
     formData.append('file', imagem);
 
+    formData.append('dataHora', getCurrentDateTime());
+
     try {
       const response = await axios.post('https://reconhecimentodeplacas.onrender.com/cadastroPlaca', formData);
 
