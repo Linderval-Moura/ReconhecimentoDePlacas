@@ -65,10 +65,13 @@ app.post('/cadastroPlaca', upload.single('file'), async (req, res) => {
     // Usar Tesseract.js para reconhecimento de caracteres na imagem
     const { data: { text } } = await Tesseract.recognize(imagemPath, "por");
 
+    // Remover espaços em branco e caracteres de nova linha do número da placa
+    const numeroPlacaLimpo = text.replace(/\s+/g, '');
+
     // const dataAtualFormatada = format(new Date(), "yyyy-MM-dd'T'HH:mm:ss.SSSxxx");
     // Criar um registro no banco de dados
     const novaPlaca = new Placa({
-      numeroPlaca: text,
+      numeroPlaca: numeroPlacaLimpo,
       cidade,
       dataHora: dataHora,
     });
