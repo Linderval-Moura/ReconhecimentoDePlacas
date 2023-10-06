@@ -2,7 +2,7 @@
     "version": 2,
     "builds": [
         { "src": "Frontend/package.json", "use": "@vercel/static-build", "config": { "outputDirectory": "Frontend/build" } },
-        { "src": "Backend/package.json", "use": "@vercel/node" }
+        { "src": "Backend/index.js", "use": "@vercel/node" }
     ],
     "routes": [
         { "src": "/api/(.*)", "dest": "Backend/$1" },
