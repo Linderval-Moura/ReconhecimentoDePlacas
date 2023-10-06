@@ -14,6 +14,11 @@ function CadastroPlaca() {
     setImagem(e.target.files[0]);
   };
 
+  const getCurrentDateTime = () => {
+    const currentDateTime = new Date().toISOString(); // Obtém a data e hora atual em formato ISO
+    return currentDateTime;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
