@@ -1,11 +1,11 @@
 {
     "version": 2,
     "builds": [
-      { "src": "Frontend", "use": "@vercel/static-build", "config": { "outputDirectory": "public" } },
-      { "src": "Backend", "use": "@vercel/node" }
+      { "src": "./Frontend", "use": "@vercel/static-build" },
+      { "src": "./Backend", "use": "@vercel/node" }
     ],
     "routes": [
-      { "src": "/api/(.*)", "dest": "Backend/$1" },
-      { "src": "/(.*)", "dest": "public/$1" }
+      { "src": "/(.*)", "dest": "Backend/" },
+      { "src": "/(.*)", "dest": "Frontend/public/" }
     ]
   }
