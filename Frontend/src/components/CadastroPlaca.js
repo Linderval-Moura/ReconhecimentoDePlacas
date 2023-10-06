@@ -18,7 +18,7 @@ function CadastroPlaca() {
 
     const formData = new FormData();
     formData.append('cidade', cidade);
-    formData.append('imagem', imagem);
+    formData.append('file', imagem);
 
     try {
       const response = await axios.post('http://localhost:3001/cadastroPlaca', formData);
@@ -34,7 +34,7 @@ function CadastroPlaca() {
   return (
     <div>
       <h1>Cadastro de Placa</h1>
-      <form onSubmit={handleSubmit} action="/cadastroPlaca" method="POST" enctype="multipart/form-data">        
+      <form id ="placaForm" action="/cadastroPlaca" method="POST" enctype="multipart/form-data" onSubmit={handleSubmit}>        
         <label htmlFor="cidade">Cidade:</label>
         <input
           type="text"
@@ -46,8 +46,8 @@ function CadastroPlaca() {
         <label htmlFor="imagem">Imagem (PNG):</label>
         <input
           type="file"
-          name="file"
-          accept="image/png"
+          name="imagem"
+          accept=".png"
           onChange={handleImagemChange}
         />
         <br />
