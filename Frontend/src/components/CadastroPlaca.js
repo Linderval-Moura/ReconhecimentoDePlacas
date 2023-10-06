@@ -57,6 +57,7 @@ function CadastroPlaca() {
           name="imagem"
           accept=".png"
           onChange={handleImagemChange}
+          required
         />
         <br />
         <div>
