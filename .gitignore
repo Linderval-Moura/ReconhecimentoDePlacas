@@ -1,8 +1,0 @@
-node_modules
-.env
-.sequelizerc
-indexcopy.js
-PlacaModel.js
-20231005171613-create-placas.js
-config.js
-sequelize-config.js
