@@ -11,11 +11,10 @@ function ConsultarPlaca() {
 
   const consultarPlaca = async () => {
 
-    const consultaUrl = `https://reconhecimentoodeplacas.onrender.com/consulta/${placa}`;
-    console.log('URL da solicitação:', consultaUrl);
-
     try {
-      const response = await axios.get(consultaUrl);
+      const response = await axios.get(`https://reconhecimentodeplacas.onrender.com/consulta/${placa}`);
+
+      console.log('URL da solicitação:', response.data);
 
       if (response.status === 200) {
         alert('Placa encontrada no banco de dados');
