@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 function CadastroPlaca() {
   const [cidade, setCidade] = useState('');
   const [imagem, setImagem] = useState(null);
-  
+
   const handleCidadeChange = (e) => {
     setCidade(e.target.value);
   };
@@ -63,7 +63,7 @@ function CadastroPlaca() {
         <input
           type="hidden"
           name="dataHora"
-          value={getCurrentDateTime()}
+          value={getCurrentDateTime}
         />
         <div>
         <button type="submit">Cadastrar Placa</button>
