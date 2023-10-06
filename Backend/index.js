@@ -11,7 +11,7 @@ const Tesseract = require('tesseract.js');
 const cors = require('cors');
 
 const app = express();
-app.use(cors({ origin: "https://vercel.com/linderval-moura/reconhecimento-de-placas" }));
+app.use(cors({ origin: "https://reconhecimento-de-placas.vercel.app" }));
 
 // Conexão com o MongoDB
 mongoose.connect(process.env.CONNECTIONSTRING, { useNewUrlParser: true, useUnifiedTopology: true })
