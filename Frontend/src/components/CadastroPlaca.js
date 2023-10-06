@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import axios from 'axios';
+import { Link } from "react-router-dom";
 
 function CadastroPlaca() {
   const [cidade, setCidade] = useState('');
@@ -56,6 +57,15 @@ function CadastroPlaca() {
         </div>
         <br />
       </form>
+      <div>
+        <Link to={"/consulta"}>
+          <button>Consultar Placas</button>
+        </Link>
+
+        <Link to={"/relatorio"}>
+          <button>Relatorio Placas</button>
+        </Link>
+      </div>
     </div>
   );
 }
