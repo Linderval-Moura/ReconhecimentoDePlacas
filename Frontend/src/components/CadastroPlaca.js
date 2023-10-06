@@ -15,7 +15,7 @@ function CadastroPlaca() {
   };
 
   const getCurrentDateTime = () => {
-    const currentDateTime = new Date().toISOString(); // Obtém a data e hora atual em formato ISO
+    const currentDateTime = new Date.now().toISOString(); // Obtém a data e hora atual em formato ISO
     return currentDateTime;
   };
 
