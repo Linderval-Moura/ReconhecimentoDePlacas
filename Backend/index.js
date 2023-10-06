@@ -19,7 +19,8 @@ mongoose.connect(process.env.CONNECTIONSTRING, { useNewUrlParser: true, useUnifi
     console.log('Base de dados conectada!');
     app.emit('pronto');
   })
-  .catch(e => console.log(e));
+  .catch(e => console.log(e)
+);
 
 // Configuração do Express
 app.use(express.json());
@@ -64,12 +65,12 @@ app.post('/cadastroPlaca', upload.single('file'), async (req, res) => {
     // Usar Tesseract.js para reconhecimento de caracteres na imagem
     const { data: { text } } = await Tesseract.recognize(imagemPath, "por");
 
-    const dataAtualFormatada = format(new Date(), "yyyy-MM-dd'T'HH:mm:ss.SSSxxx");
+    // const dataAtualFormatada = format(new Date(), "yyyy-MM-dd'T'HH:mm:ss.SSSxxx");
     // Criar um registro no banco de dados
     const novaPlaca = new Placa({
       numeroPlaca: text,
       cidade,
-      dataHora: dataAtualFormatada,
+      dataHora: dataHora,
     });
 
     await novaPlaca.save();
