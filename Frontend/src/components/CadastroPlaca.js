@@ -22,7 +22,7 @@ function CadastroPlaca() {
     formData.append('file', imagem);
 
     try {
-      const response = await axios.post('http://localhost:3001/cadastroPlaca', formData);
+      const response = await axios.post('https://reconhecimentodeplacas.onrender.com/cadastroPlaca', formData);
 
       if (response.status === 200) {
         alert('Placa cadastrada com sucesso!');
