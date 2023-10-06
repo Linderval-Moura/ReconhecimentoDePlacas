@@ -127,7 +127,7 @@ app.get('/relatorio/cidade/:cidade', async (req, res) => {
 //Rota para consultar placas
 app.get('/consulta/:placa', async (req, res) => {
   try {
-    const { placa } = req.body;
+    const { placa } = req.params;
 
     // Consulte o banco de dados para verificar se a placa existe
     const registro = await Placa.findOne({ numeroPlaca: placa });
