@@ -3,7 +3,6 @@ import axios from 'axios';
 
 function ConsultarPlaca() {
   const [placa, setPlaca] = useState('');
-  const [mensagem, setMensagem] = useState('');
 
   const handlePlacaChange = (e) => {
     setPlaca(e.target.value);
@@ -20,7 +19,7 @@ function ConsultarPlaca() {
         alert('Placa encontrada no banco de dados');
       } else if (response.status === 404) {
         alert('Placa não encontrada no banco de dados');
-      }
+      };
     } catch (error) {
       console.error('Erro ao consultar placa:', error);
     }
@@ -41,7 +40,6 @@ function ConsultarPlaca() {
       <div>
         <button onClick={consultarPlaca}>Consultar Placa</button>
       </div>
-      {mensagem && <p>{mensagem}</p>}
     </div>
   );
 }
