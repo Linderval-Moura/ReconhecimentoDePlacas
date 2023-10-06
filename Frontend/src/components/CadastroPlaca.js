@@ -1,12 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 import { Link } from "react-router-dom";
 
 function CadastroPlaca() {
   const [cidade, setCidade] = useState('');
   const [imagem, setImagem] = useState(null);
-  const [currentDateTime, setCurrentDateTime] = useState('');
-
+  
   const handleCidadeChange = (e) => {
     setCidade(e.target.value);
   };
@@ -20,10 +19,6 @@ function CadastroPlaca() {
     return currentDateTime;
   };
 
-  useEffect(() => {
-    setCurrentDateTime(getCurrentDateTime());
-  }, []);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -31,7 +26,7 @@ function CadastroPlaca() {
     formData.append('cidade', cidade);
     formData.append('file', imagem);
 
-    formData.append('dataHora', currentDateTime);
+    formData.append('dataHora', getCurrentDateTime());
 
     try {
       const response = await axios.post('https://reconhecimentodeplacas.onrender.com/cadastroPlaca', formData);
@@ -68,7 +63,7 @@ function CadastroPlaca() {
         <input
           type="hidden"
           name="dataHora"
-          value={currentDateTime}
+          value={getCurrentDateTime()}
         />
         <div>
         <button type="submit">Cadastrar Placa</button>
