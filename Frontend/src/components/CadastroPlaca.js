@@ -15,7 +15,7 @@ function CadastroPlaca() {
   };
 
   const getCurrentDateTime = () => {
-    const currentDateTime = new Date.toISOString();
+    const currentDateTime = new Date().toISOString();
     return currentDateTime;
   };
 
@@ -63,7 +63,7 @@ function CadastroPlaca() {
         <input
           type="hidden"
           name="dataHora"
-          value={getCurrentDateTime}
+          value={getCurrentDateTime()}
         />
         <div>
         <button type="submit">Cadastrar Placa</button>
