@@ -10,8 +10,12 @@ function ConsultarPlaca() {
   };
 
   const consultarPlaca = async () => {
+    
+    const formData = new FormData();
+    formData.append('placa', placa);
+
     try {
-      const response = await axios.get(`https://reconhecimentodeplacas.onrender.com/consulta/${placa}`);
+      const response = await axios.get(`https://reconhecimentodeplacas.onrender.com/consulta/${placa}`, formData);
 
       if (response.status === 200) {
         setMensagem('Placa encontrada no banco de dados');
