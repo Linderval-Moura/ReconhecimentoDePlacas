@@ -18,6 +18,7 @@ const allowedOrigins = ['https://reconhecimento-de-placas.vercel.app',
 
 const corsOptions = {
   origin: allowedOrigins,
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
 };
 
 app.use(cors(corsOptions));
@@ -99,20 +100,20 @@ app.get('/relatorio/cidade/:cidade', async (req, res) => {
   try {
     const cidade = req.params.cidade;
 
-    // Consulte o banco de dados para obter registros com a cidade especificada
-    const registros = await Placa.find({ cidade });
+    // Consulto o banco de dados para obter registros com a cidade especificada
+    const registros = await Placa.find({ cidade: cidade });
 
     // Crie um novo documento PDF
     const doc = new PDFDocument();
 
-    // Defina o nome do arquivo PDF gerado
+    // Define o nome do arquivo PDF gerado
     const pdfFileName = `relatorio_${cidade}_${format(new Date(), 'yyyyMMddHHmmss')}.pdf`;
 
-    // Defina os cabeçalhos HTTP para fazer o navegador baixar o PDF
-    res.setHeader('Content-disposition', `attachment; filename=${pdfFileName}`);
+    // Define os cabeçalhos HTTP para fazer o navegador baixar o PDF
     res.setHeader('Content-type', 'application/pdf');
+    res.setHeader('Content-disposition', `attachment; filename=${pdfFileName}`);
 
-    // Crie o PDF com as informações dos registros
+    // Cria o PDF com as informações dos registros
     doc.pipe(res);
 
     doc.fontSize(16).text(`Relatório de Registros - Cidade: ${cidade}`, { align: 'center' });
@@ -122,9 +123,10 @@ app.get('/relatorio/cidade/:cidade', async (req, res) => {
       doc.fontSize(12).text(`Cidade: ${registro.cidade}`);
       const dataHoraFormatada = format(parseISO(registro.dataHora), "dd/MM/yyyy HH:mm:ss");
       doc.fontSize(12).text(`Data e Hora: ${dataHoraFormatada}`);
-      doc.moveDown();
+      doc.moveDown(0.5);
     });
 
+    // Finaliza o pdf
     doc.end();
 
   } catch (error) {
