@@ -140,14 +140,14 @@ app.get('/consulta/:placa', async (req, res) => {
   try {
     const { placa } = req.params;
 
-    // Consulte o banco de dados para verificar se a placa existe
+    // Consulta o banco de dados para verificar se a placa existe
     const registro = await Placa.findOne({ numeroPlaca: placa });
 
     if (registro) {
-      // Se a placa existe, retorne um JSON com uma mensagem de sucesso
+      // Se a placa existe, retorna um JSON com uma mensagem de sucesso
       res.status(200).json({ message: 'Placa encontrada no banco de dados' });
     } else {
-      // Se a placa não existe, retorne um JSON com uma mensagem de erro
+      // Se a placa não existe, retorna um JSON com uma mensagem de erro
       res.status(404).json({ message: 'Placa não encontrada no banco de dados' });
     }
   } catch (error) {

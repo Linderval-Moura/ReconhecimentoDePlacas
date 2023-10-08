@@ -17,11 +17,12 @@ function ConsultarPlaca() {
 
       if (response.status === 200) {
         alert('Placa encontrada no banco de dados');
-      } else if (response.status === 404) {
+      } else {
         alert('Placa não encontrada no banco de dados');
       };
     } catch (error) {
       console.error('Erro ao consultar placa:', error);
+      alert('Erro ao consultar a placa');
     }
   };
 
