@@ -3,6 +3,7 @@ import axios from 'axios';
 
 function ConsultarPlaca() {
   const [placa, setPlaca] = useState('');
+  const [mensagem, setMensagem] = useState('');
 
   const handlePlacaChange = (e) => {
     setPlaca(e.target.value);
@@ -13,17 +14,14 @@ function ConsultarPlaca() {
     try {
       const response = await axios.get(`https://reconhecimentodeplacas.onrender.com/consulta/${placa}`);
 
-      console.log('URL da solicitação:', response);
-
       if (response.status === 200) {
-        alert('Placa encontrada no banco de dados');
-      };
-      if (response.status === 404) {
-        alert('Placa não encontrada no banco de dados');
-      };
+        setMensagem('Placa encontrada no banco de dados');
+      } else {
+        setMensagem('Placa não encontrada no banco de dados');
+      }
     } catch (error) {
       console.error('Erro ao consultar placa:', error);
-      alert('Erro ao consultar a placa');
+      setMensagem('Erro ao consultar a placa');
     }
   };
 
@@ -42,6 +40,7 @@ function ConsultarPlaca() {
       <div>
         <button onClick={consultarPlaca}>Consultar Placa</button>
       </div>
+      {mensagem && <p>{mensagem}</p>}
     </div>
   );
 }
