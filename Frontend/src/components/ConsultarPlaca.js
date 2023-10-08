@@ -17,7 +17,8 @@ function ConsultarPlaca() {
 
       if (response.status === 200) {
         alert('Placa encontrada no banco de dados');
-      } else {
+      };
+      if (!response.status === 200) {
         alert('Placa não encontrada no banco de dados');
       };
     } catch (error) {
