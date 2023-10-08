@@ -13,12 +13,12 @@ function ConsultarPlaca() {
     try {
       const response = await axios.get(`https://reconhecimentodeplacas.onrender.com/consulta/${placa}`);
 
-      console.log('URL da solicitação:', response.data);
+      console.log('URL da solicitação:', response);
 
       if (response.status === 200) {
         alert('Placa encontrada no banco de dados');
       };
-      if (!response.status === 200) {
+      if (response.status === 404) {
         alert('Placa não encontrada no banco de dados');
       };
     } catch (error) {
